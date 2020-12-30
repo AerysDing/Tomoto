@@ -1,0 +1,13 @@
+certifi==2020.12.5
+chardet==4.0.0
+Django==1.11.29
+gevent==20.12.1
+greenlet==0.4.17
+gunicorn==20.0.4
+idna==2.10
+pytz==2020.5
+qiniu==7.3.0
+requests==2.25.1
+urllib3==1.26.2
+zope.event==4.5.0
+zope.interface==5.2.0
