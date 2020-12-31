@@ -18,3 +18,4 @@ LoginRequired = gen_logic_err("LoginRequired",1002)     #短信验证失败
 UserFormErr = gen_logic_err('UserFormErr', 1003)        # 用户表单数据错误
 ProfileFormErr = gen_logic_err('ProfileFormErr', 1004)  # 用户资料表单错误
 RepeatSwipeErr = gen_logic_err('RepeatSwipeErr', 1005)  # 重复滑动的错误
+LOGIN_REQUIRED = gen_logic_err("LOGIN_REQUIRE",1006)

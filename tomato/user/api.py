@@ -27,7 +27,6 @@ def get_note(request):
 def register(request):
     "register"
     phone = request.POST.get("phone")
-    print("request-POST",request.POST)
     password = request.POST.get("password")
     vcode =  request.POST.get("vcode")
     key = keys.VCODE_K % phone
@@ -57,11 +56,12 @@ def laoding(request):
 
 
 def get_profile(request):
-    print("uid==",request.uid)
-    key = keys.MODEL_K(profile.__name__,request.uid)
+    uid = str(request.session["uid"])
+    print(type(uid))
+    key = keys.MODEL_K % (profile.__name__, uid)
     Profile = rds.get(key)
     if Profile == None:
-        Profile, _ = profile.objects.get_or_create(id=request.uid)  # get_or_create
+        Profile, _ = profile.objects.get_or_create(id=request.session["uid"])  # get_or_create
         rds.set(key,Profile)
     return render_json()
 

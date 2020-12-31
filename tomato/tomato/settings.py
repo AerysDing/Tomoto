@@ -45,6 +45,7 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',#安全
+    "common.middleware.AuthMiddleware"
 ]
 
 ROOT_URLCONF = 'tomato.urls'
