@@ -5,7 +5,6 @@ import pickle
 class Redis(_redis):
     def set(self, name, value,ex=None, px=None, nx=False, xx=False, keepttl=False):
         pickle_value = pickle.dumps(value,pickle.HIGHEST_PROTOCOL)
-
         return super().set(name,pickle_value,ex,px,nx,xx)
 
 

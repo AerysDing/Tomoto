@@ -31,7 +31,6 @@ ALLOWED_HOSTS = ["*"]    #允许访问的主机
 # Application definition
 
 INSTALLED_APPS = [
-
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.staticfiles',

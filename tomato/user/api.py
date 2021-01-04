@@ -10,7 +10,8 @@ from common import stat
 from common import keys
 from user.forms import UserForm
 from user.forms import ProfileFrom
-from user.logics import save_avatar
+import os
+from libs.qncloud import upload_to_qn
 # Create your views here.
 
 
@@ -74,21 +75,31 @@ def modify_profile(request):
         raise stat.UserFormErr(user_form.errors)
     if not user_profile.is_valid():
         raise stat.ProfileFormErr(user_profile.errors)
-    # 修改用户数据
+    # modify user data
     user.object.filter(id=request.uid).update(**user_form.cleaned_data)
-    # 修改profile数据
+    # modify profile data
     profile.object.update_or_create(id=request.uid,defaults=user_profile.cleaned_data)
-    # 更新urllib缓存
+    # update urllib cache
     key = keys.MODEL_K % (profile.__name__, request.uid)
     rds.delete(key)
     return render_json()
 
 
 def upload_avater(request):
-    avter_file = request.FILES.get("avatar")
-    a = save_avatar(avter_file)
-    print(a)
+    """上传形象"""
+    # 1.接受用户图片，保存到本地
+    avatar_file = request.FILES.get("avatar")
+    filepath, filename = save_tmp_file(avatar_file)
+    # 2.上传七牛云
+    url = upload_to_qn(filepath, filename)
+    # 3. 更新用户的 avatar 字段
+    user.objects.filter(id=request.session["uid"]).update(avatar=url)
+    # 4. 删除本地的临时文件
+    os.remove(filepath)
     return render_json()
+
+
+
 
 
 

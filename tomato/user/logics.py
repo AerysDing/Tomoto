@@ -5,6 +5,7 @@ import requests
 from libs.cache import rds
 from uuid import uuid4
 from libs.qncloud import upload_to_qn
+from user.models import user
 import os
 
 
@@ -44,21 +45,9 @@ def save_tmp_file(tmp_file):
     tmp_filename = uuid4().hex
     tmp_filepath = '/tmp/%s' % tmp_filename
     with open(tmp_filepath, 'wb') as fp:
-        for chunk in tmp_file.chunks():      # Don't understand , what is tmp_file.chunks() funation
+        for chunk in tmp_file.chunks():      # chunks() - Django 分割的块，均匀大小，可设置。  循环一块一块的写进去。
             fp.write(chunk)
     return tmp_filepath, tmp_filename
 
-
-def save_avatar(avatar_file):
-    '''保存用户形象图片'''
-    filepath, filename = save_tmp_file(avatar_file)
-    print(filename,filepath)
-    # 2. 上传到七牛云
-    url = upload_to_qn(filepath, filename)
-    # 3. 更新用户的 avatar 字段
-    # user.objects.filter(id=uid).update(avatar=url)
-    # 4. 删除本地的临时文件
-    os.remove(filepath)
-    return url
 
 
