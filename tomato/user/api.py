@@ -4,13 +4,13 @@ from user.models import user
 from user.models import profile
 from libs.cache import rds
 from user.logics import send_note
-from user.logics import save_tmp_file
+from user.logics import save_avatar
 from libs.http import render_json
 from common import stat
 from common import keys
 from user.forms import UserForm
 from user.forms import ProfileFrom
-import os
+
 from libs.qncloud import upload_to_qn
 # Create your views here.
 
@@ -89,13 +89,8 @@ def upload_avater(request):
     """上传形象"""
     # 1.接受用户图片，保存到本地
     avatar_file = request.FILES.get("avatar")
-    filepath, filename = save_tmp_file(avatar_file)
-    # 2.上传七牛云
-    url = upload_to_qn(filepath, filename)
-    # 3. 更新用户的 avatar 字段
-    user.objects.filter(id=request.session["uid"]).update(avatar=url)
-    # 4. 删除本地的临时文件
-    os.remove(filepath)
+    print(avatar_file)
+    save_avatar.delay(request.session["uid"],avatar_file)
     return render_json()
 
 

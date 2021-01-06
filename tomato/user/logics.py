@@ -7,6 +7,7 @@ from uuid import uuid4
 from libs.qncloud import upload_to_qn
 from user.models import user
 import os
+from tasks import celery_app
 
 
 def code(length=6):
@@ -45,9 +46,18 @@ def save_tmp_file(tmp_file):
     tmp_filename = uuid4().hex
     tmp_filepath = '/tmp/%s' % tmp_filename
     with open(tmp_filepath, 'wb') as fp:
-        for chunk in tmp_file.chunks():      # chunks() - Django 分割的块，均匀大小，可设置。  循环一块一块的写进去。
+        for chunk in tmp_file:      # chunks() - Django 分割的块，均匀大小，可设置。  循环一块一块的写进去。
             fp.write(chunk)
     return tmp_filepath, tmp_filename
 
-
-
+@celery_app.task
+def save_avatar(uid,avatar_file):
+    "1 保存用户图片"
+    filepath, filename = save_tmp_file(avatar_file)
+    print(filepath,filename)
+    # 2.上传七牛云
+    url = upload_to_qn(filepath, filename)
+    # 3. 更新用户的 avatar 字段
+    user.objects.filter(id=uid).update(avatar=url)
+    # 4. 删除本地的临时文件
+    # os.remove(filepath)
