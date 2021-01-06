@@ -31,7 +31,6 @@ ALLOWED_HOSTS = ["*"]    #允许访问的主机
 # Application definition
 
 INSTALLED_APPS = [
-
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.staticfiles',
@@ -45,6 +44,7 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',#安全
+    "common.middleware.AuthMiddleware"
 ]
 
 ROOT_URLCONF = 'tomato.urls'
