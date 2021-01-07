@@ -12,6 +12,19 @@ def rmcd_user(request):
     result = [user.to_dict() for user in users]
     return render_json(result)
 
+def like(request):
+    """右滑:喜欢"""
+    sid = request.POST.get("sid")
+    result = logics.like_someone(request.session["uid"],sid)
+
+
+def superlike(request):
+
+    pass
+
+
+
+
 
 def like_some(request):
     sid = int(request.GET.get("uid"))

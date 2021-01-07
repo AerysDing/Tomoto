@@ -36,8 +36,6 @@ class user(models.Model):
             "birthday":str(self.birthday),
             "avatar":self.avatar,
             "location":self.location
-
-
         }
 
 
@@ -70,7 +68,6 @@ class profile(models.Model):
         "only_matched":self.only_matched,
         "auto_play":self.auto_play,
         }
-
 
     class Meta:
         db_table = "profile"

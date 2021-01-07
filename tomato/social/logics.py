@@ -29,8 +29,7 @@ def rcmd(uid):
 
 
 
-def like_someone(uid,sid,stype):
-    # try:
-    swipe_test = swiped.objects.create(uid=uid,sid=sid,stype=stype)
-    # except swipe_test.IntegrityError:
-    #     raise stat.RepeatSwipeErr
+def like_someone(uid,sid):
+    """右滑：喜欢某人"""
+    #添加一条滑动记录（不允许重复滑动某人）
+    #检查是否可以匹配成好友

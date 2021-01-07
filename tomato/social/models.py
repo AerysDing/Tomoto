@@ -4,7 +4,7 @@ from django.db import models
 
 
 class swiped(models.Model):
-    """滑动几率"""
+    """滑动记录"""
     STYPE = (
         ("like","右滑"),
         ("superlike","上滑"),
@@ -15,6 +15,16 @@ class swiped(models.Model):
     stype = models.CharField(max_length=10)
     stime = models.DateTimeField(auto_created=True,verbose_name="滑动时间")
     class Meta:
-        unique_together = ("uid","sid")
+        unique_together = ("uid","sid")   # 联合唯一
+
+
+
+class Friend(models.Model):
+    """好友表"""
+    uid1 = models.IntegerField(verbose_name="用户ID")
+    uid2 = models.IntegerField(verbose_name="用户ID")
+
+    class Meta:
+        unique_together = ("uid1", "uid2")
 
 
