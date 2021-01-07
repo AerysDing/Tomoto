@@ -1,2 +1,2 @@
 import pymysql
-pymysql.instalgitl_as_MySQLdb()
+pymysql.install_as_MySQLdb()
