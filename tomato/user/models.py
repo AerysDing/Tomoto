@@ -26,6 +26,21 @@ class user(models.Model):
     location = models.CharField(max_length=20,default="北京",choices=LOCATION,verbose_name="常居地")
     avatar = models.CharField(max_length=256,verbose_name="个人形象的URL")
     password = models.CharField(max_length=254,default="123",verbose_name="密码")
+
+    def to_dict(self):
+        return {
+            "id":self.id,
+            "phonenum":self.phone,
+            "nicename":self.name,
+            "gender":self.gender,
+            "birthday":str(self.birthday),
+            "avatar":self.avatar,
+            "location":self.location
+
+
+        }
+
+
     class Meta:
         db_table = "user"
 
@@ -41,8 +56,26 @@ class profile(models.Model):
     vibration = models.BooleanField(default=True, verbose_name='是否开启震动')
     only_matched = models.BooleanField(default=True, verbose_name='不让未匹配的人看我的相册')
     auto_play = models.BooleanField(default=True, verbose_name='自动播放视频')
+
+    def to_dict(self):
+        return {
+            "id":self.id,
+        "dating_gender":self.dating_gender,
+        "dating_location":self.dating_location,
+        "min_distance":self.min_distance,
+        "max_distance":self.max_distance,
+        "min_dating_age":self.min_dating_age,
+        "max_dating_age":self.max_dating_age,
+        "vibration":self.vibration,
+        "only_matched":self.only_matched,
+        "auto_play":self.auto_play,
+        }
+
+
     class Meta:
         db_table = "profile"
+
+
 
 
 

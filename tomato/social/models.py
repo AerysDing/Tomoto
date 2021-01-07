@@ -1,6 +1,8 @@
 from django.db import models
 
 # Create your models here.
+
+
 class swiped(models.Model):
     """滑动几率"""
     STYPE = (
