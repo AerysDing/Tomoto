@@ -12,6 +12,8 @@ class AuthMiddleware(MiddlewareMixin):
         uid = request.session.get("uid")
         if not uid:
             return render_json(code=stat.LOGIN_REQUIRED)
+        else:
+            request.uid = uid   # 动态增加 uid 属性
 
 
 #Session 处理过程
@@ -77,3 +79,9 @@ class AuthMiddleware(MiddlewareMixin):
 #                             httponly=settings.SESSION_COOKIE_HTTPONLY or None,
 #                         )
 #         return response
+
+class LogicErrMiddleware(MiddlewareMixin):
+    def process_exception(self,request,exception):      #  as e 传参(exception)  e 和 exception 是一个异常的实例
+        if isinstance(exception,stat.LogicErr):              #  exception 是logiceErr 的实例
+            return render_json(exception.data,exception.code)
+

@@ -27,6 +27,6 @@ urlpatterns = [
   url(r'^api/user/upload_avater',user_api.upload_avater),
   #社交模块的接口
   url(r'^api/social/rmcd_user',social_api.rmcd_user),
-  url(r'^api/social/like_someone',social_api.like_some),
+  url(r'^api/social/like',social_api.like),
 
 ]

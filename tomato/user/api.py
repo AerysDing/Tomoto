@@ -64,7 +64,7 @@ def get_profile(request):
     if Profile == None:
         Profile, _ = profile.objects.get_or_create(id=request.session["uid"])  # get_or_create
         rds.set(key,Profile)
-    return render_json()
+    return render_json(Profile.to_dict())
 
 
 def modify_profile(request):

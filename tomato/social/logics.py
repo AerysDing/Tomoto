@@ -1,8 +1,10 @@
-from social.models import swiped
 from common import stat
 from user.models import user
 from user.models import profile
 import datetime
+from social.models import swiped
+from django.db.utils import IntegrityError
+from social.models import Friend
 
 def rcmd(uid):
     """用户推荐接口"""
@@ -32,4 +34,19 @@ def rcmd(uid):
 def like_someone(uid,sid):
     """右滑：喜欢某人"""
     #添加一条滑动记录（不允许重复滑动某人）
-    #检查是否可以匹配成好友
+    try:
+        swiped.objects.create(uid=uid,sid=sid,stype="like") #联合唯一报错
+    except IntegrityError:  #捕获错误
+        raise  stat.RepeatSwipeErr
+    #检查对方的是否划过我  检查是否可以匹配成好友
+    result = swiped.objects.filter(uid=sid,sid=uid,stype__in = ["like","superlike"]).exists()
+    if result:
+        try:
+            Friend.objects.create(uid1=sid,uid2=uid)
+            return True
+        except:
+            raise stat.AreadyFriends
+    else:
+        return False
+
+
