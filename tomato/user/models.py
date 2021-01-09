@@ -55,6 +55,9 @@ class profile(models.Model):
     only_matched = models.BooleanField(default=True, verbose_name='不让未匹配的人看我的相册')
     auto_play = models.BooleanField(default=True, verbose_name='自动播放视频')
 
+
+    def __str__(self):
+        return   str(self.id)
     def to_dict(self):
         return {
             "id":self.id,

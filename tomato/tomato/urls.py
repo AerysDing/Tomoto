@@ -28,5 +28,6 @@ urlpatterns = [
   #社交模块的接口
   url(r'^api/social/rmcd_user',social_api.rmcd_user),
   url(r'^api/social/like',social_api.like),
-
+  url(r'^api/social/superlike',social_api.superlike),
+  url(r'^api/social/dislike',social_api.dislike),
 ]

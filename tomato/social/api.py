@@ -18,19 +18,17 @@ def like(request):
     return render_json({"is_matched":is_matched})
 
 
-# def superlike(request):
-#
-#     pass
+def superlike(request):
+    """上滑：超级喜欢"""
+    sid = request.POST.get("sid")
+    is_matched = logics.superlike_some(request.session["uid"], sid)
+    return render_json({"is_matched": is_matched})
 
 
-
-# def like_some(request):
-#     sid = int(request.GET.get("uid"))
-#     print("sid==",sid)
-#     is_matched = like_someone("1",sid,"like")
-#     return render_json()
-
-
-
-
+def dislike(request):
+    """左滑：不喜欢"""
+    sid = request.POST.get("sid")
+    print("---7---",request.uid,sid)
+    logics.dislike_someone(request.uid,sid)
+    return render_json()
  

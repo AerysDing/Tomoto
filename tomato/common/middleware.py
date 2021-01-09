@@ -81,7 +81,7 @@ class AuthMiddleware(MiddlewareMixin):
 #         return response
 
 class LogicErrMiddleware(MiddlewareMixin):
-    def process_exception(self,request,exception):      #  as e 传参(exception)  e 和 exception 是一个异常的实例
+    def process_exception(self,request,exception):               #  as e 传参(exception)  e 和 exception 是一个异常的实例
         if isinstance(exception,stat.LogicErr):              #  exception 是logiceErr 的实例
             return render_json(exception.data,exception.code)
 
