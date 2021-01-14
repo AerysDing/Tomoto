@@ -7,7 +7,6 @@ class Redis(_redis):
         pickle_value = pickle.dumps(value,pickle.HIGHEST_PROTOCOL)
         return super().set(name,pickle_value,ex,px,nx,xx)
 
-
     def get(self, name, default=None):
         '''Return the value at key ``name``, or ``default`` if the key doesn't exist'''
         pickled_value = super().get(name)
@@ -22,3 +21,5 @@ class Redis(_redis):
                 return value
 
 rds =Redis(**REDIS)
+
+

@@ -27,6 +27,10 @@ class user(models.Model):
     avatar = models.CharField(max_length=256,verbose_name="个人形象的URL")
     password = models.CharField(max_length=254,default="123",verbose_name="密码")
 
+    vip_id = models.IntegerField(default=1,verbose_name="用户对应的ID")
+    Vip_end = models.DateTimeField(default="2100-01-01",verbose_name="会员过期时间")
+
+
     def to_dict(self):
         return {
             "id":self.id,

@@ -22,5 +22,5 @@ ProfileFormErr = gen_logic_err('ProfileFormErr', 1004)  #用户资料表单错�
 RepeatSwipeErr = gen_logic_err('RepeatSwipeErr', 1005)  #重复滑动的错误
 LOGIN_REQUIRED = gen_logic_err("LOGIN_REQUIRE",1006)
 AreadyFriends = gen_logic_err('AreadyFriends', 1007)    # 两者已经是好友，无需重复添加
-
-
+RewindLimited = gen_logic_err("RewindLimited",1008)     #反悔次数已经达到上线
+RewindTimeout_K = gen_logic_err("RewindTimeout",1009)   #超出反悔时间

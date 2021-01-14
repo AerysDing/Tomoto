@@ -7,6 +7,7 @@ from django.db.utils import IntegrityError
 from social.models import Friend
 from libs.cache import rds
 from common import keys
+from django.db.models import Q
 
 def rcmd_from_rds(uid):
      #取出推荐队列里到用户
@@ -104,6 +105,71 @@ def dislike_someone(uid,sid):
     except IntegrityError:  # 捕获错误
         raise stat.RepeatSwipeErr
     rds.lrem(keys.FIRST_RCMD %  uid, 1, sid)
+
+
+def rewind_last_swipe(uid):
+    """
+    反悔上一次的滑动
+    每天反悔3次
+    反悔记录只能在5分钟内
+    """
+    #取出当前时间
+    now = datetime.datetime.now()
+    #检查当前是否反悔了3次
+    key = keys.Rewind_K % (now.date(),uid)
+    rewind_times = rds.get(key,0) #取出当天的反悔次数
+    if rewind_times >= 3:
+        #达到：直接给用户提示
+        raise stat.RewindLimited
+        #未达到：正常进行逻辑处理
+    # 找到最后一次的滑动的记录
+    latest_swipe = swiped.objects.filter(uid=uid).latest("stime")
+    # 距离上一次滑动已经过去的秒数
+    passed_time = (now - latest_swipe.stime).total_seconds()
+    # 对比当前时间和最后一次的滑动时间
+    if passed_time >=300:
+       # 否：给用户提示    超过5分钟
+       raise stat.RewinTimeout
+    if latest_swipe.stype in ["like","superlike"]:
+        # 1.好友关系删掉
+        Friend.objects.filter(uid1=uid,uid2=latest_swipe.sid).delete()
+        if latest_swipe.stype == "superlike":
+            # 2.优先推荐列表里的数据删掉
+            rds.lrem((keys.FIRST_RCMD % latest_swipe.sid,1,uid))
+    # 删除最后一次的滑动记录
+    latest_swipe.delete()
+    #全部完成后，累加反悔次数
+    rds.set(key,rewind_times+1,86400 * 2)
+
+
+def who_liked_me(uid):
+    """找到喜欢过我的人，并且我还有划过对方的人"""
+    # 取出所有所有划过的ID
+    sid_list = swiped.objects.filter(uid=uid).values_list("sid", flat=True)
+    print("---10---", sid_list)
+    uid_list = swiped.objects.filter(sid=uid,stype__in=["like","superlike"]).exclude(uid__in=sid_list).values_list("uid",flat=True)
+    print("---11---", uid_list)
+    #取出喜欢过自己的用户数据
+    users = user.objects.filter(id__in=uid_list)
+    print("---12---",users)
+    return users
+
+
+def get_my_friends_id(uid):
+    """获取用户自己好友ID列表"""
+    query_condition = Q(uid1=uid) | Q(uid2=uid)
+    friend_list = Friend.objects.filter(query_condition)
+    print("---14--",friend_list)
+    friend_id = []
+    for f in friend_list:
+        if f.uid1 == uid:
+            friend_id.append(f.uid2)
+        else:
+            friend_id.append(f.uid1)
+    print("--15--",friend_id)
+    friend = user.objects.filter(id__in=friend_id)
+    print("--16--",friend)
+    return friend
 
 
 

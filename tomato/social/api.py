@@ -31,4 +31,25 @@ def dislike(request):
     print("---7---",request.uid,sid)
     logics.dislike_someone(request.uid,sid)
     return render_json()
- 
+
+
+def rewind(request):
+    """反悔接口"""
+    logics.rewind_last_swipe(request.uid)
+    return render_json()
+
+
+def show_who_like_me(request):
+    """查看都有谁喜欢过我"""
+    print("----8----",request.uid)
+    users = logics.who_liked_me(request.uid)
+    result =  [user.to_dict() for user in users]
+    return render_json(result)
+
+
+def friends(request):
+    """获取朋友列表"""
+    friends_list = logics.get_my_friends_id(request.uid)
+    result = [user.to_dict() for user in friends_list]
+    return render_json(result)
+
