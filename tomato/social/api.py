@@ -1,6 +1,6 @@
 from libs.http import render_json
 from social import logics
-
+from vip.logics import need_permission
 
 def rmcd_user(request):
     "推荐用户"
@@ -17,7 +17,7 @@ def like(request):
     is_matched = logics.like_someone(request.session["uid"],sid)
     return render_json({"is_matched":is_matched})
 
-
+@need_permission("superlike")
 def superlike(request):
     """上滑：超级喜欢"""
     sid = request.POST.get("sid")

@@ -1,6 +1,10 @@
 from django.utils.deprecation import MiddlewareMixin
 from libs.http import render_json
 from common import stat
+import logging
+
+err_log = logging.getLogger("err")
+
 class AuthMiddleware(MiddlewareMixin):
     "登陆检查中间件"
     white_list = ("api/user/get_note","api/user/register","api/user/laoding")
@@ -83,5 +87,6 @@ class AuthMiddleware(MiddlewareMixin):
 class LogicErrMiddleware(MiddlewareMixin):
     def process_exception(self,request,exception):               #  as e 传参(exception)  e 和 exception 是一个异常的实例
         if isinstance(exception,stat.LogicErr):              #  exception 是logiceErr 的实例
+            err_log.error(f"Code:{exception.code} Date:{exception.data}")
             return render_json(exception.data,exception.code)
 

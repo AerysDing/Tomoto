@@ -8,7 +8,9 @@ from libs.qncloud import upload_to_qn
 from user.models import user
 import os
 from tasks import celery_app
+import logging
 
+info_log = logging.getLogger("inf")
 
 def code(length=6):
     char = []
@@ -22,6 +24,8 @@ def send_note(mobile):
     if rds.get(key):
         return
     vcode = code()
+    info_log.info("验证码:",vcode)
+
     arg = conf.YZX_SMS_ARGS.copy()
     arg["param"] = vcode
     arg["mobile"] = mobile
@@ -60,4 +64,4 @@ def save_avatar(uid,avatar_file):
     # 3. 更新用户的 avatar 字段
     user.objects.filter(id=uid).update(avatar=url)
     # 4. 删除本地的临时文件
-    # os.remove(filepath)
+    os.remove(filepath)

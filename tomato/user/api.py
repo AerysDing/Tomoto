@@ -10,10 +10,11 @@ from common import stat
 from common import keys
 from user.forms import UserForm
 from user.forms import ProfileFrom
+import logging
 
+inf_log = logging.getLogger("inf")
 from libs.qncloud import upload_to_qn
 # Create your views here.
-
 
 def get_note(request):
     """get note"""
@@ -32,9 +33,9 @@ def register(request):
     vcode =  request.POST.get("vcode")
     key = keys.VCODE_K % phone
     cache_vcode = rds.get(key)
-    print("vcode",cache_vcode)
     if vcode and vcode == cache_vcode:
         users = user.objects.create(phone=phone,password=password)
+
         return render_json()
     else:
         raise stat.VcodeErr
@@ -44,9 +45,9 @@ def laoding(request):
     """laoding"""
     phone = request.POST.get("phone")
     password = request.POST.get("password")
-    print("loading",phone,password)
     try:
         users = user.objects.get(phone=phone)   #查询集  返回是queryset对象 --懒加载
+        inf_log.info(f'User({users.id}:{users.name}) login')
     except users.DoesNotExist:
         raise stat.LogicErr
     if phone == users.phone and password == users.password:

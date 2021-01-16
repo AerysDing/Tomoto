@@ -2,6 +2,10 @@ from django.db import models
 
 # Create your models here.
 from django.db import models
+import datetime
+
+from vip.models import Vip
+
 
 class user(models.Model):
     """user表的数据类型"""
@@ -28,7 +32,7 @@ class user(models.Model):
     password = models.CharField(max_length=254,default="123",verbose_name="密码")
 
     vip_id = models.IntegerField(default=1,verbose_name="用户对应的ID")
-    Vip_end = models.DateTimeField(default="2100-01-01",verbose_name="会员过期时间")
+    vip_end = models.DateTimeField(default="2100-01-01",verbose_name="会员过期时间")
 
 
     def to_dict(self):
@@ -41,6 +45,21 @@ class user(models.Model):
             "avatar":self.avatar,
             "location":self.location
         }
+
+    def check_vip_end_time(self):
+        '''检查VIP过期时间，如果过期，自动修改为普通用户身份'''
+        if self.vip_id != 1:
+            if datetime.datetime.now() >= self.vip_end:
+                self.vip_id = 1
+                self.save()
+
+    @property
+    def vip(self):
+        '''用户对应的 VIP Model'''
+        if not hasattr(self, '_vip'):
+            self._vip = Vip.objects.get(id=self.vip_id)
+        return self._vip
+
 
 
     class Meta:
