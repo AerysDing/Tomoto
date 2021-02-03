@@ -37,13 +37,13 @@ def rcmd_from_db(uid,num):
         location=Profile.dating_location,
         birthday__gte=earliest_birthday,
         birthday__lte=lalest_birthday
-        ).exclude(id__in=sid_list)[:30]  #懒加载   #exclude() 排除
+        ).exclude(id__in=sid_list)[:30]     #懒加载   #exclude() 排除
     return users
 
 
 def rcmd(uid):
     """用户推荐接口"""
-    filter_suers = rcmd_from_rds(uid) #首先取出队列中的用户
+    filter_suers = rcmd_from_rds(uid)      #首先取出队列中的用户
     print("--5---",filter_suers)
     num = len(filter_suers)
     if num >= 30: #如果数量满足30个直接返回

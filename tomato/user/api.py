@@ -59,7 +59,6 @@ def laoding(request):
 
 def get_profile(request):
     uid = str(request.session["uid"])
-    print(type(uid))
     key = keys.MODEL_K % (profile.__name__, uid)
     Profile = rds.get(key)
     if Profile == None:

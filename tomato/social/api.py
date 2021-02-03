@@ -3,7 +3,7 @@ from social import logics
 from vip.logics import need_permission
 
 def rmcd_user(request):
-    "推荐用户"
+    """推荐用户"""
     users = logics.rcmd(request.session["uid"])
     # print(users)
     result = [user.to_dict() for user in users]
@@ -16,6 +16,7 @@ def like(request):
     print("---5--",sid,request.session["uid"])
     is_matched = logics.like_someone(request.session["uid"],sid)
     return render_json({"is_matched":is_matched})
+
 
 @need_permission("superlike")
 def superlike(request):
@@ -52,4 +53,6 @@ def friends(request):
     friends_list = logics.get_my_friends_id(request.uid)
     result = [user.to_dict() for user in friends_list]
     return render_json(result)
+
+
 
