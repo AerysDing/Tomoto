@@ -13,7 +13,6 @@ def rmcd_user(request):
 def like(request):
     """右滑:喜欢"""
     sid = request.POST.get("sid")
-    print("---5--",sid,request.session["uid"])
     is_matched = logics.like_someone(request.session["uid"],sid)
     return render_json({"is_matched":is_matched})
 
@@ -54,5 +53,11 @@ def friends(request):
     result = [user.to_dict() for user in friends_list]
     return render_json(result)
 
+
+
+def hot_rank(request):
+    """全服人气热度排行榜"""
+    rank_data = logics.get_top_n(50)
+    return render_json(rank_data)
 
 

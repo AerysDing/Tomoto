@@ -35,7 +35,6 @@ def register(request):
     cache_vcode = rds.get(key)
     if vcode and vcode == cache_vcode:
         users = user.objects.create(phone=phone,password=password)
-
         return render_json()
     else:
         raise stat.VcodeErr

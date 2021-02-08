@@ -35,23 +35,21 @@ class user(models.Model):
     vip_end = models.DateTimeField(default="2100-01-01",verbose_name="会员过期时间")
 
 
-    def to_dict(self):
-        return {
-            "id":self.id,
-            "phonenum":self.phone,
-            "nicename":self.name,
-            "gender":self.gender,
-            "birthday":str(self.birthday),
-            "avatar":self.avatar,
-            "location":self.location
-        }
-
     def check_vip_end_time(self):
         '''检查VIP过期时间，如果过期，自动修改为普通用户身份'''
         if self.vip_id != 1:
             if datetime.datetime.now() >= self.vip_end:
                 self.vip_id = 1
                 self.save()
+
+    def set_vip(self,vip_id):
+        """谁子用户的VIP"""
+        now = datetime.datetime.now()
+        vip = Vip.object.get(id = vip_id)
+        self.vip_id = vip_id
+        self.vip_end = now + datetime.timedelta(vip.duration)
+        del self.vip
+        self.save()
 
     @property
     def vip(self):
@@ -81,19 +79,7 @@ class profile(models.Model):
 
     def __str__(self):
         return   str(self.id)
-    def to_dict(self):
-        return {
-            "id":self.id,
-        "dating_gender":self.dating_gender,
-        "dating_location":self.dating_location,
-        "min_distance":self.min_distance,
-        "max_distance":self.max_distance,
-        "min_dating_age":self.min_dating_age,
-        "max_dating_age":self.max_dating_age,
-        "vibration":self.vibration,
-        "only_matched":self.only_matched,
-        "auto_play":self.auto_play,
-        }
+
 
     class Meta:
         db_table = "profile"

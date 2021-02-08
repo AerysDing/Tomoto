@@ -1,5 +1,17 @@
 import os
 
+TOMATO_SCORE = {
+    "like": 5,
+    "superlike":10,
+    "dislike":-5
+
+
+}
+
+
+
+
+
 #Redis 配置
 REDIS = {
     "host":"172.18.0.20" if "SWIPER_DOCKER" in os.environ else "localhost",

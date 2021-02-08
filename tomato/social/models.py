@@ -18,7 +18,6 @@ class swiped(models.Model):
         unique_together = ("uid","sid")   # 联合唯一
 
 
-
 class Friend(models.Model):
     """好友表"""
     uid1 = models.IntegerField(verbose_name="用户ID")
